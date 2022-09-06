@@ -41,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .cors().and().csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(this.unauthorizedHandler)
+                .exceptionHandling().authenticationEntryPoint(this.unauthorizedHandler)//Le decimos que controlador de excepciones elegimos (AuthEntryPointJwt).
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -59,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    private PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 

@@ -44,8 +44,8 @@ public class AuthResource {
 
     @PostMapping(path = "/signin")
     public ResponseEntity<?> authenticationUser(@Valid @RequestBody LoginRequest loginRequest) {
-        Authentication authentication = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
-        authentication = this.authenticationManager.authenticate(authentication);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
+        Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
