@@ -29,16 +29,14 @@ public class JwtUtils {
     public String getUsernameFromJwtToken(String token) {
         return Jwts.parser()
                 .setSigningKey(this.jwtSecret)
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
     }
 
     public boolean validateJwtToken(String authToken) {
         try {
-            Jwts.parser()
-                    .setSigningKey(this.jwtSecret)
-                    .parseClaimsJwt(authToken);
+            Jwts.parser().setSigningKey(this.jwtSecret).parseClaimsJws(authToken);
             return true;
         } catch (SignatureException e) {
             LOGGER.error("Invalid JWT signature {}", e.getMessage());
