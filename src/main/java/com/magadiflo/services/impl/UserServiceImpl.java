@@ -45,4 +45,9 @@ public class UserServiceImpl implements IUserService {
     public Optional<Role> findByName(EnumRole name) {
         return this.roleRepository.findByName(name);
     }
+
+    @Override
+    public void saveUser(User user) {
+        this.userRepository.save(user);
+    }
 }

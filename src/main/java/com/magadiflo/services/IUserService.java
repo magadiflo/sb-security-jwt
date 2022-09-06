@@ -18,4 +18,5 @@ public interface IUserService {
     //Role
     Optional<Role> findByName(EnumRole name);
 
+    void saveUser(User user);
 }
