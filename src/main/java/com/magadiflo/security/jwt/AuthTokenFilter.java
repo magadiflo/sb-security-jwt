@@ -48,29 +48,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
-                /**
-                 * >>>> CONOCIENDO EL OBJETO WebAuthenticationDetailsSource()
-                 * WebAuthenticationDetailsSource(), Tiene la única responsabilidad de convertir una instancia
-                 * de la clase HttpServletRequest en una instancia de la clase WebAuthenticationDetails.
-                 * Puedes pensar en ello como un simple convertidor.
-                 *
-                 * El objeto HttpServletRequest que representa los datos HTTP sin procesar y analizar es una
-                 * clase Java estándar es la entrada. Y WebAuthenticationDetails es una clase Spring interna.
-                 *
-                 * Por lo tanto, puede considerarlo como un puente entre las clases de servlet y las clases de Spring.
-                 *
-                 * >>>> ¿POR QUÉ NO LO USAREMOS?
-                 * En el tutorial está esta línea de código y según investigué este no sería necesario, ya que no estamos
-                 * usando sessiones sino una autenticación por token.
-                 *
-                 * "Parece que esta línea es para cargar la información de la sesión para la solicitud actual del
-                 * lado del servidor. Sin embargo, como todos sabemos, este proyecto se basa en la autenticación
-                 * basada en token y, por lo tanto, cargar la sesión en el servidor ya no sirve (supongo que cargar
-                 * la sesión aquí es esencial si usamos la autenticación tradicional session_id)."
-                 */
-                //authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
