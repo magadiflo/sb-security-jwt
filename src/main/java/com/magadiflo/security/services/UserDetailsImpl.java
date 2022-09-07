@@ -11,8 +11,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Si el proceso de autenticación es exitoso, podemos obtener información del usuario,
- * como nombre de usuario, contraseña, autoridades de un objeto de Authentication.
+ * UserDetails contiene la información necesaria (como: nombre de usuario, contraseña, autoridades)
+ * para crear un objeto de autenticación.
+ *
  * Ejm.
  * Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
  * UserDetails userDetails = (UserDetails) authentication.getPrincipal();

@@ -44,6 +44,14 @@ public class AuthResource {
 
     @PostMapping(path = "/signin")
     public ResponseEntity<?> authenticationUser(@Valid @RequestBody LoginRequest loginRequest) {
+        /**
+         *  UsernamePasswordAuthenticationToken obtiene {nombre de usuario, contraseña} de la solicitud
+         *  de inicio de sesión, AuthenticationManager lo usará para autenticar una cuenta de inicio de sesión.
+         *
+         *  AuthenticationManager tiene un DaoAuthenticationProvider (con la ayuda de UserDetailsService y PasswordEncoder)
+         *  para validar el objeto UsernamePasswordAuthenticationToken. Si tiene éxito, AuthenticationManager devuelve
+         *  un objeto de autenticación completo (incluidas las autorizaciones otorgadas).
+         */
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
         Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
 

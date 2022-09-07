@@ -32,6 +32,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.authTokenFilter = authTokenFilter;
     }
 
+    /**
+     * La implementación de UserDetailsService se utilizará para configurar DaoAuthenticationProvider
+     * mediante el método AuthenticationManagerBuilder.userDetailsService().
+     *
+     * También necesitamos un PasswordEncoder para DaoAuthenticationProvider.
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(this.userDetailsService).passwordEncoder(this.passwordEncoder());
