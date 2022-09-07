@@ -10,3 +10,5 @@ INSERT INTO roles(name) VALUES('ROLE_USER');
 INSERT INTO roles(name) VALUES('ROLE_MODERATOR');
 INSERT INTO roles(name) VALUES('ROLE_ADMIN');
 ```
+# [Spring Boot Refresh Token with JWT example](https://www.bezkoder.com/spring-boot-refresh-token-jwt/)
+Tomado de la página web **BezKoder**
