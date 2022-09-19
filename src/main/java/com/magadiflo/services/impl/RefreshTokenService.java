@@ -1,5 +1,6 @@
 package com.magadiflo.services.impl;
 
+import com.magadiflo.exceptions.TokenRefreshException;
 import com.magadiflo.models.RefreshToken;
 import com.magadiflo.repository.RefreshTokenRepository;
 import com.magadiflo.repository.UserRepository;
@@ -43,7 +44,7 @@ public class RefreshTokenService implements IRefreshTokenService {
     public RefreshToken verifyExpiration(RefreshToken refreshToken) {
         if(refreshToken.getExpirityDate().compareTo(Instant.now()) < 0) {
             this.refreshTokenRepository.delete(refreshToken);
-            // TODO: Lanzar excepción personalizada del tipo TokenRefreshExeption
+            throw new TokenRefreshException(refreshToken.getToken(), "Refresh token was expired. Please make a new signin request");
         }
         return refreshToken;
     }
