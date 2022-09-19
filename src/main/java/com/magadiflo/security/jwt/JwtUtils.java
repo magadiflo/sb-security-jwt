@@ -14,7 +14,14 @@ public class JwtUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtils.class);
     private String jwtSecret = "mi-clave-secreta-12345";
-    private int jwtExpirationMs = 86400000; //24h
+
+    /**
+     * Para testear
+     * jwtExpirationMs= 60000 //1 minuto
+     * jwtRefreshExpirationMs= 120000 //2 minutos
+     * */
+    private int jwtExpirationMs = 3600000; //1h
+    private int jwtRefreshExpirationMs = 86400000; //24h
 
     public String generateJwtToken(Authentication authentication) {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
