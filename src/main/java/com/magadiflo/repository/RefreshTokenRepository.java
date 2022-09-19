@@ -12,11 +12,11 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
 
     Optional<RefreshToken> findByToken(String token);
 
-    int deleteByUsername(User user);
+    int deleteByUser(User user);
 
 }
 /**
- * NOTA: El método de arriba, deleteByUsername(...) estaba anotado con @Modifying, pero según investigué esto solo se aplica a
+ * NOTA: El método de arriba, deleteByUser(...) estaba anotado con @Modifying, pero según investigué esto solo se aplica a
  * los métodos que usan la anotación @Query(...) para hacer la consulta cuyas instrucciones incluyen:
  * INSERT, UPDATE, DELETE y DDL
  *

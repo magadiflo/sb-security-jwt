@@ -12,3 +12,11 @@ INSERT INTO roles(name) VALUES('ROLE_ADMIN');
 ```
 # [Spring Boot Refresh Token with JWT example](https://www.bezkoder.com/spring-boot-refresh-token-jwt/)
 Tomado de la página web **BezKoder**
+
+# Para testear
+Cambiar los valores de las variables para hacer pruebas rápidas.
+
+```
+jwtExpirationMs= 60000 //1 minuto
+jwtRefreshExpirationMs= 120000 //2 minutos
+```
