@@ -1,14 +1,19 @@
 package com.magadiflo.resources;
 
+import com.magadiflo.exceptions.TokenRefreshException;
 import com.magadiflo.models.EnumRole;
+import com.magadiflo.models.RefreshToken;
 import com.magadiflo.models.Role;
 import com.magadiflo.models.User;
 import com.magadiflo.payload.request.LoginRequest;
 import com.magadiflo.payload.request.SignupRequest;
+import com.magadiflo.payload.request.TokenRefreshRequest;
 import com.magadiflo.payload.response.JwtResponse;
 import com.magadiflo.payload.response.MessageResponse;
+import com.magadiflo.payload.response.TokenRefreshResponse;
 import com.magadiflo.security.jwt.JwtUtils;
 import com.magadiflo.security.services.UserDetailsImpl;
+import com.magadiflo.services.IRefreshTokenService;
 import com.magadiflo.services.IUserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,13 +36,15 @@ import java.util.stream.Collectors;
 public class AuthResource {
     private final AuthenticationManager authenticationManager;
     private final IUserService userService;
+    private final IRefreshTokenService refreshTokenService;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
 
-    public AuthResource(AuthenticationManager authenticationManager, IUserService userService,
+    public AuthResource(AuthenticationManager authenticationManager, IUserService userService, IRefreshTokenService refreshTokenService,
                         PasswordEncoder passwordEncoder, JwtUtils jwtUtils) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
+        this.refreshTokenService = refreshTokenService;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtils = jwtUtils;
     }
@@ -63,7 +70,9 @@ public class AuthResource {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(new JwtResponse(jwt, "aqui-ira-el-refresh-token",userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
+        RefreshToken refreshToken = this.refreshTokenService.createRefreshToken(userDetails.getId());
+
+        return ResponseEntity.ok(new JwtResponse(jwt, refreshToken.getToken(),userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
     }
 
     @PostMapping(path = "/signup")
@@ -106,6 +115,19 @@ public class AuthResource {
         user.setRoles(roles);
         this.userService.saveUser(user);
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+    }
+
+    @PostMapping(path = "/refresh-token")
+    public ResponseEntity<?> refreshToken(@Valid @RequestBody TokenRefreshRequest request) {
+        String requestRefreshToken = request.getRefreshToken();
+        return this.refreshTokenService.findByToken(requestRefreshToken)
+                .map(this.refreshTokenService::verifyExpiration)
+                .map(RefreshToken::getUser)
+                .map(user -> {
+                    String token = this.jwtUtils.generateTokenFromUsername(user.getUsername());
+                    return ResponseEntity.ok(new TokenRefreshResponse(token, requestRefreshToken));
+                })
+                .orElseThrow(() -> new TokenRefreshException(requestRefreshToken, "Refresh token is not in database!"));
     }
 
 

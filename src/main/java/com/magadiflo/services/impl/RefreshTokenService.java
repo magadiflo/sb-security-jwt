@@ -15,7 +15,10 @@ import java.util.UUID;
 @Service
 public class RefreshTokenService implements IRefreshTokenService {
 
-    private final int jwtRefreshExpirationMs = 86400000; //24h
+    //private final int jwtRefreshExpirationMs = 86400000; //24h
+
+    //Para testear
+    private final int jwtRefreshExpirationMs = 120000; //2 minutos
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository;
 
@@ -25,11 +28,13 @@ public class RefreshTokenService implements IRefreshTokenService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<RefreshToken> findByToken(String token) {
         return this.refreshTokenRepository.findByToken(token);
     }
 
     @Override
+    @Transactional
     public RefreshToken createRefreshToken(Long userId) {
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setUser(this.userRepository.findById(userId).get());

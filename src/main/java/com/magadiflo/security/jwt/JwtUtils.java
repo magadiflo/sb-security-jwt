@@ -14,12 +14,19 @@ public class JwtUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtils.class);
     private String jwtSecret = "mi-clave-secreta-12345";
-    private int jwtExpirationMs = 3600000; //1h
+    //private int jwtExpirationMs = 3600000; //1h
+
+    //Para testear
+    private int jwtExpirationMs = 60000; //1 minuto
 
     public String generateJwtToken(Authentication authentication) {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        return this.generateTokenFromUsername(userPrincipal.getUsername());
+    }
+
+    public String generateTokenFromUsername(String username) {
         return Jwts.builder()
-                .setSubject(userPrincipal.getUsername())
+                .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, this.jwtSecret)
